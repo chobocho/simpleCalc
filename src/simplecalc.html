@@ -1,0 +1,77 @@
+﻿
+<HTML>
+    <head>
+        <title>Chobocho's Simple Calculator</title>
+            <style>
+                .tile {
+                  text-align:center;
+                  width:40px;
+                  height:40px;
+                  font-size:24px;
+                  background-color:"white";
+                  border:1px solid black;
+                  box-shadow:black 1px 1px;
+                }
+            </style>       
+        
+        <script language="JavaScript">
+            function init() {
+                var table = document.getElementById("keypad");
+                
+                window.onkeydown = onKeyDown;
+                window.onkeyup   = onKeyUp;
+                
+                var keypadValue = [ "1", "2", "3", "+", "4", "5", "6", "-", "7", "8", "9", "x", "0", "C", "=", "/" ];                
+
+                for (var i = 0; i < 4; i++) {
+                    var tr = document.createElement("tr");
+                    for (var j = 0; j < 4; j++) {
+                        var td = document.createElement("td");
+                        td.className="tile";
+                        var idx = i*4 + j;
+                     
+                        td.value = idx;
+                        td.index = idx;
+                        td.textContent = keypadValue[idx];
+                        td.onclick = onClick;
+                        tr.appendChild(td);
+                    }
+                    table.appendChild(tr);
+                } 
+            }  
+            function onKeyUp(e) {
+            }
+            function onKeyDown(e) {
+            }
+            function onClick(e) {
+               var clkTile = e.srcElement.index;
+
+               switch(clkTile) {
+               case 0 :
+               case 1 :
+               case 2 :
+               case 3 :
+               case 4 :
+               case 5 :
+               case 6 :
+               case 7 :
+               case 8 :
+               case 9 :
+                   console.log(clkTile);
+                   break;
+               default:
+                   break;
+               }
+            }         
+        </script>
+    </head>
+    <body onload="init()">
+         <table id="keypad" align="center">
+            <tr>
+                <td colspan=4>
+                <textarea id="result" disabled=true cols="35" rows="5"></textarea>
+                </td>
+            </tr>
+         </table>
+    </body>
+</HTML>
