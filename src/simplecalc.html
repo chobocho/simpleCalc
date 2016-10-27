@@ -26,8 +26,8 @@
         
         <script language="JavaScript">
             var sum = 0;
-            var exp = "";
             var ret = "";
+            var keypadValue = [ "AC", "←", "(", ")", "7", "8", "9", "÷", "4", "5", "6", "×", "1", "2", "3", "-", "0", ".", "=", "+" ];
             
             function init() {
                 var table = document.getElementById("keypad");
@@ -36,8 +36,6 @@
                 window.onkeydown = onKeyDown;
                 window.onkeyup   = onKeyUp;
                 
-                var keypadValue = [ "AC", "←", "(", ")", "7", "8", "9", "÷", "4", "5", "6", "×", "1", "2", "3", "-", "0", ".", "=", "+" ];                
-
                 for (var i = 0; i < 5; i++) {
                     var tr = document.createElement("tr");
                     for (var j = 0; j < 4; j++) {
@@ -66,62 +64,33 @@
                case 0 : // AC
                     sum = 0;
                     ret = "";
-                    exp = "";
                     break;
                case 1 : // <-
                     ret = ret.slice(0,-1);
                     break;
                case 2 : // (
-                    ret = ret + "(";
-                    break;
                case 3 : // )
-                    ret = ret + ")";
-                    break;
                case 4 : // 7
-                    ret = ret + "7";
-                    break;
                case 5 : // 8
-                       ret = ret + "8";
-                    break;
                case 6 : // 9
-                    ret = ret + "9";
-                    break;
                case 7 : // ÷
-                    //exp = exp + ret + "/"; 
-                    ret = ret + "/";
-                    break;
                case 8 : // 4
-                    ret = ret + "4";
-                    break;
                case 9 :
-                    ret = ret + "5";
-                    break;
                case 10 :
-                    ret = ret + "6";
-                    break;
                case 11 : // x
-                    exp = exp + ret + "*"; 
-                    ret = ret + "*";
-                    break;
                case 12 : 
-                    ret = ret + "1";
-                    break;
                case 13 :
-                    ret = ret + "2";
-                    break;
                case 14 :
-                    ret = ret + "3";
+               case 16 : // 0
+               case 19 : // +
+                    ret = ret + keypadValue[clkTile];
                     break;
                case 15 : // -
                     if (ret == "") {
                         ret = "-";
                     } else {
-                        exp = exp + ret + "-"; 
                         ret = ret + "-";
                     }
-                    break;
-               case 16 : 
-                    ret = ret + "0";
                     break;
                case 17 : // .
                     if (ret == "") {
@@ -132,22 +101,23 @@
                     
                     break;
                case 18 : // =
-                    try {
-                        sum = eval(ret);
-                    } catch(e) {
-                        sum = "Error";
+                    if (ret == "" && sum != 0) {
+                        ret = sum;
+                    } else {
+                        ret = ret.replace(/×/g, "*").replace(/÷/g, "/");
+                        try {
+                            sum = eval(ret);
+                        } catch(e) {
+                            sum = "Error";
+                        }
+                        ret = "";
                     }
-                    ret = "";
                     isClickEqual = true;
-                    break;
-               case 19 : // +
-                    exp = exp + ret + "+"; 
-                    ret = ret + "+";
                     break;               
                default:
                    break;
                }
-               console.log("Ret " + ret + " Sum : " + sum);
+               console.log("Exp : " + ret + " Sum : " + sum);
                
                document.getElementById("result").value = isClickEqual ? sum : ret;
             }         
