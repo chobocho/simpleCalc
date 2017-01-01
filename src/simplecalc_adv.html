@@ -1,0 +1,227 @@
+﻿<HTML>
+    <head>
+        <title>Chobocho's Simple Calculator</title>
+            <style>
+                .tile {
+                  text-align:center;
+                  width:40px;
+                  height:40px;
+                  font-size:24px;
+                  background-color:"white";
+                  border:1px solid black;
+                  box-shadow:black 1px 1px;
+                }
+                
+                textarea {
+                  height:100px;
+                  width:380px;
+                  text-align:right;
+                  font-size:24px;
+                  border:1px solid black;
+                  box-shadow:black 1px 1px;
+                  padding:2px;
+                }
+
+                input {
+                  height:40px;
+                  width:140px;
+                  text-align:right;
+                  font-size:24px;
+                  background-color:"white";
+                  border:1px solid black;
+                  box-shadow:black 1px 1px;
+                }
+            </style>       
+        
+        <script language="JavaScript">
+            var sum = 0;
+            var ret = "";
+            var keypadValue = [ "AC", "←", "(", ")", "7", "8", "9", "÷", "4", "5", "6", "×", "1", "2", "3", "-", "0", ".", "=", "+" ];
+
+            function init() {
+                var table = document.getElementById("keypad");
+
+                
+                window.onkeydown = onKeyDown;
+                window.onkeyup   = onKeyUp;
+                
+                for (var i = 0; i < 5; i++) {
+                    var tr = document.createElement("tr");
+                    for (var j = 0; j < 4; j++) {
+                        var td = document.createElement("td");
+                        td.className="tile";
+                        var idx = i*4 + j;
+                     
+                        td.value = idx;
+                        td.index = idx;
+                        td.textContent = keypadValue[idx];
+                        td.onclick = onClick;
+                        tr.appendChild(td);
+                    }
+                    table.appendChild(tr);
+                }
+                
+                var MmkeypadId = [ "btnSA", "btnSB", "btnSC", "btnSD", "btnA", "btnB", "btnC", "btnD" ];
+                
+                for (var i = 0; i < MmkeypadId.length; i++) {
+                    var btn = document.getElementById(MmkeypadId[i]);
+                    btn.onclick = onClick;
+                    btn.index = i + 21;
+                }
+            
+            }  
+
+            function onKeyUp(e) {
+            }
+            function onKeyDown(e) {
+            }
+            function onClick(e) {
+               var clkTile = e.srcElement.index;
+               var isClickEqual = false;
+               var tsum = ""
+               var sa = "", sb = "", sc = "", sd = ""
+               var mmID = [ "sa", "sb", "sc", "sd" ];
+
+               switch(clkTile) {
+               case 0 : // AC
+                    sum = 0;
+                    ret = "";
+                    break;
+               case 1 : // <-
+                    ret = ret.slice(0,-1);
+                    break;
+               case 2 : // (
+               case 3 : // )
+               case 4 : // 7
+               case 5 : // 8
+               case 6 : // 9
+               case 7 : // ÷
+               case 8 : // 4
+               case 9 :
+               case 10 :
+               case 11 : // x
+               case 12 : 
+               case 13 :
+               case 14 :
+               case 16 : // 0
+               case 19 : // +
+                    ret = ret + keypadValue[clkTile];
+                    break;
+               case 15 : // -
+                    if (ret == "") {
+                        ret = "-";
+                    } else {
+                        ret = ret + "-";
+                    }
+                    break;
+               case 17 : // .
+                    if (ret == "") {
+                        ret = "0.";
+                    } else {
+                        ret = ret + ".";
+                    }                    
+                    break;
+               case 18 : // =
+                    if (ret == "" && sum != 0) {
+                        ret = sum;
+                    } else {
+                        sa = document.getElementById("sa").value; 
+                        sb = document.getElementById("sb").value;
+                        sc = document.getElementById("sc").value; 
+                        sd = document.getElementById("sd").value;
+                        ret = ret.replace(/×/g, "*").replace(/÷/g, "/")
+                                 .replace(/A/g, sa).replace(/B/g, sb).replace(/C/g, sc).replace(/D/g, sd);
+                        try {
+                            sum = eval(ret);
+                        } catch(e) {
+                            sum = "Error";
+                        }
+                        ret = "";
+                    }
+                    isClickEqual = true;
+                    break;        
+               case 21 :
+               case 22 :
+               case 23 :
+               case 24 :
+                   if (ret == "") {
+                      tsum = "0"
+                   } else {
+                        sa = document.getElementById("sa").value; 
+                        sb = document.getElementById("sb").value;
+                        sc = document.getElementById("sc").value; 
+                        sd = document.getElementById("sd").value;
+                        tsum = ret.replace(/×/g, "*").replace(/÷/g, "/")
+                                  .replace(/A/g, sa).replace(/B/g, sb).replace(/C/g, sc).replace(/D/g, sd);
+                      try {
+                          tsum = eval(tsum);
+                      } catch(e) {
+                          tsum = "0";
+                      }
+                   }
+                   document.getElementById(mmID[clkTile-25]).value = tsum;
+                   break;
+               case 25 : // A
+                    ret = ret + "A"
+                    break;
+                   break;
+               case 26 :
+                   ret = ret + "B"
+                   break;
+               case 27 :
+                   ret = ret + "C"
+                   break;
+               case 28 :
+                   ret = ret + "D"
+                   break;
+               default:
+                   break;
+               }
+               console.log("Exp : " + ret + " Sum : " + sum);
+               
+               document.getElementById("result").value = isClickEqual ? sum : ret;
+            }         
+        </script>
+    </head>
+    <body onload="init()">
+         <table align="center">
+              <tr>
+                  <td colspan=4>
+                  <textarea id="result" disabled=true cols="35" rows="1"></textarea>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <table align=center>
+                          <tr>
+                              <td class="tile" id="btnSA">SA</td>
+                              <td class="tile" id="btnSB">SB</td>
+                              <td class="tile" id="btnSC">SC</td>
+                              <td class="tile" id="btnSD">SD</td>
+                          </tr>
+                          <tr>
+                              <td class="tile" id="btnA">A</td>
+                              <td colspan="3"><input id="sa" value="0"></input>
+                          </tr>
+                          <tr>
+                              <td class="tile" id="btnB">B</td>
+                              <td colspan="3"><input id="sb" value="0"></input>
+                          </tr>
+                          <tr>
+                              <td class="tile" id="btnC">C</td>
+                              <td colspan="3"><input id="sc" value="0"></input>
+                          </tr>
+                          <tr>
+                              <td class="tile" id="btnD">D</td>
+                              <td colspan="3"><input id="sd" value="0"></input>
+                          </tr>
+                      </table>
+                   </td>   
+                   <td>
+                      <table id="keypad" aligne="center">
+                      </table>
+                   </td>
+              </tr>
+         </table>
+    </body>
+</HTML>
