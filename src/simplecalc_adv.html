@@ -144,8 +144,8 @@
                case 22 :
                case 23 :
                case 24 :
-                   if (ret == "") {
-                      tsum = "0"
+                   if (ret == "" && sum != 0) {
+                      tsum = sum;
                    } else {
                         sa = document.getElementById("sa").value; 
                         sb = document.getElementById("sb").value;
@@ -159,7 +159,7 @@
                           tsum = "0";
                       }
                    }
-                   document.getElementById(mmID[clkTile-25]).value = tsum;
+                   document.getElementById(mmID[clkTile-21]).value = tsum;
                    break;
                case 25 : // A
                     ret = ret + "A"
